@@ -1,3 +1,5 @@
+import com.lguplus.sre.common.JobBuildUser
+
 import com.lguplus.sre.online.TestAutomation
 
 def call(Map baseArgs) {
@@ -25,10 +27,6 @@ def call(Map baseArgs) {
     pipeline {
         agent any
 
-        tools {
-            maven 'maven'
-        }
-
         options {
             disableConcurrentBuilds()
             skipDefaultCheckout(true)
@@ -42,10 +40,27 @@ def call(Map baseArgs) {
         }
 
         stages {
+            script.echo '0'
+            stage('Check build permission') {
+                steps {
+                    script {
+                        script.echo '1'
+                        wrap([$class: 'BuildUser']) {
+                            buildUserId = env.BUILD_USER_ID
+                        }
+                        script.echo '2'
+                        JobBuildUser.checkPermission(this, baseArgs.project, buildUserId, env.BRANCH_NAME)
+                        script.echo '3'
+                    }
+                }
+            }
             stage('Checkout') {
                 steps {
+                    script.echo '-4'
                     cleanWs()
+                    script.echo '-5'
                     checkout scm
+                    script.echo '-6'
 
                     script {
                         def git_hash = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
