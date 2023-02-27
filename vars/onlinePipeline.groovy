@@ -47,6 +47,7 @@ def call(Map baseArgs) {
                     }
                 }
             }
+
             stage('Checkout') {
                 steps {
                     cleanWs()
@@ -71,6 +72,16 @@ def call(Map baseArgs) {
                                 sh "git checkout ${git_hash}"
                             }
                         }
+                    }
+                }
+            }
+
+            stage('Build') {
+                steps {
+                    script {
+                        sh "./gradlew clean build -x test"
+                        sh "ls -alh build/libs"
+                        sh "sha256sum build/libs/*.jar"
                     }
                 }
             }
