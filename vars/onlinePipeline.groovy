@@ -25,6 +25,10 @@ def call(Map baseArgs) {
     pipeline {
         agent any
 
+        tools {
+            maven 'maven'
+        }
+
         options {
             disableConcurrentBuilds()
             skipDefaultCheckout(true)
