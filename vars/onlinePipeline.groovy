@@ -79,7 +79,7 @@ def call(Map baseArgs) {
             stage('Build') {
                 steps {
                     script {
-                        sh "./gradlew clean build -x test"
+                        sh "./gradlew clean build -x test --parallel --no-daemon"
                         sh "ls -alh build/libs"
                         sh "sha256sum build/libs/*.jar"
                     }
