@@ -40,27 +40,17 @@ def call(Map baseArgs) {
         }
 
         stages {
-            script.echo '0'
             stage('Check build permission') {
                 steps {
                     script {
-                        script.echo '1'
-                        wrap([$class: 'BuildUser']) {
-                            buildUserId = env.BUILD_USER_ID
-                        }
-                        script.echo '2'
-                        JobBuildUser.checkPermission(this, baseArgs.project, buildUserId, env.BRANCH_NAME)
-                        script.echo '3'
+                        JobBuildUser.checkPermission(this, baseArgs.project, baseArgs.buildUserId, env.BRANCH_NAME)
                     }
                 }
             }
             stage('Checkout') {
                 steps {
-                    script.echo '-4'
                     cleanWs()
-                    script.echo '-5'
                     checkout scm
-                    script.echo '-6'
 
                     script {
                         def git_hash = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
