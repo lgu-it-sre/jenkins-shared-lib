@@ -54,7 +54,11 @@ def call(Map baseArgs) {
                     checkout scm
 
                     script {
+                        println "BRANCH_NAME: ${env.BRANCH_NAME}"
+
                         def git_hash = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
+                        println "GIT_HASH: ${git_hash}"
+
                         if (params.ROLLBACK) {
                             timeout(time: 10, unit: 'MINUTES') {
                                 git_hash = input(
