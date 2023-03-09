@@ -40,6 +40,13 @@ def call(Map baseArgs) {
         }
 
         stages {
+            stage('Print ALL env') {
+                steps {
+                    script {
+                        sh 'printenv | sort'
+                    }
+                }
+            }
             stage('Check build permission') {
                 steps {
                     script {
